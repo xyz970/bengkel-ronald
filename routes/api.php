@@ -3,6 +3,7 @@
 use App\Http\Controllers\Api\AuthController;
 use App\Http\Controllers\Api\KendaraanController;
 use App\Http\Controllers\Api\ReservasiController;
+use App\Http\Middleware\ApiAuthCheck;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
@@ -24,11 +25,14 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
 Route::post('register',[AuthController::class, 'register']);
 Route::post('login',[AuthController::class, 'login']);
 
-Route::group(['prefix'=>'kendaraan'],function(){
-    Route::post('insert',[KendaraanController::class, 'insert']);
+Route::middleware(ApiAuthCheck::class)->group(function(){
+    Route::group(['prefix'=>'kendaraan'],function(){
+        Route::post('insert',[KendaraanController::class, 'insert']);
+    });
+    Route::group(['prefix'=>'reservasi'],function(){
+        Route::post('insert',[ReservasiController::class, 'insert']);
+    });
 });
 
-Route::group(['prefix'=>'reservasi'],function(){
-    Route::post('insert',[ReservasiController::class, 'insert']);
-});
+
 

@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: localhost:3306
--- Generation Time: May 31, 2023 at 06:46 AM
+-- Generation Time: Jun 02, 2023 at 07:53 AM
 -- Server version: 8.0.30
 -- PHP Version: 8.1.10
 
@@ -30,10 +30,10 @@ SET time_zone = "+00:00";
 CREATE TABLE `kendaraan` (
   `uuid` varchar(100) NOT NULL,
   `merk` varchar(50) NOT NULL,
-  `model` varchar(100) NOT NULL,
+  `model_id` int NOT NULL,
   `nomor_rangka` varchar(50) NOT NULL,
   `user_id` varchar(100) NOT NULL,
-  `tipe_id` int NOT NULL,
+  `tipe_mobil` varchar(50) NOT NULL,
   `tahun_produksi` year NOT NULL,
   `warna` varchar(70) NOT NULL,
   `nopol` varchar(30) NOT NULL,
@@ -42,6 +42,31 @@ CREATE TABLE `kendaraan` (
   `created_at` timestamp NULL DEFAULT NULL,
   `updated_at` timestamp NULL DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+
+--
+-- Dumping data for table `kendaraan`
+--
+
+INSERT INTO `kendaraan` (`uuid`, `merk`, `model_id`, `nomor_rangka`, `user_id`, `tipe_mobil`, `tahun_produksi`, `warna`, `nopol`, `nomor_stnk`, `masa_stnk`, `created_at`, `updated_at`) VALUES
+('523932ff-fa34-4da6-9a1c-4eec42f09986', 'Honda', 1, 'VXC09ZYU', 'fd73d715-1273-44b1-a1d5-f65f2c48cc7b', 'Civic Turbo Type R', 2022, 'Burning Red', 'P 0923 LK', '109723572190431', '2027-05-21', '2023-06-02 07:44:05', '2023-06-02 07:44:05');
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `model_mobil`
+--
+
+CREATE TABLE `model_mobil` (
+  `id` int NOT NULL,
+  `keterangan` varchar(50) DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+
+--
+-- Dumping data for table `model_mobil`
+--
+
+INSERT INTO `model_mobil` (`id`, `keterangan`) VALUES
+(1, 'Civic MT');
 
 -- --------------------------------------------------------
 
@@ -52,11 +77,12 @@ CREATE TABLE `kendaraan` (
 CREATE TABLE `reservasi` (
   `id` varchar(100) NOT NULL,
   `kendaraan_id` varchar(100) NOT NULL,
+  `user_id` varchar(100) NOT NULL,
   `detail_service` varchar(50) DEFAULT NULL,
   `tanggal` date DEFAULT NULL,
   `jam` time DEFAULT NULL,
   `keluhan` text,
-  `status` varchar(50) DEFAULT NULL,
+  `status` enum('pending','onprocess','done') NOT NULL DEFAULT 'pending',
   `created_at` timestamp NULL DEFAULT NULL,
   `updated_at` timestamp NULL DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
@@ -101,17 +127,6 @@ CREATE TABLE `service` (
 -- --------------------------------------------------------
 
 --
--- Table structure for table `tipe_mobil`
---
-
-CREATE TABLE `tipe_mobil` (
-  `id` int NOT NULL,
-  `keterangan` varchar(50) DEFAULT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
-
--- --------------------------------------------------------
-
---
 -- Table structure for table `users`
 --
 
@@ -119,6 +134,8 @@ CREATE TABLE `users` (
   `uuid` varchar(100) NOT NULL,
   `nama` varchar(100) NOT NULL,
   `no_hp` varchar(16) DEFAULT NULL,
+  `verified` enum('true','false') DEFAULT 'false',
+  `verified_at` timestamp NULL DEFAULT NULL,
   `email` varchar(50) DEFAULT NULL,
   `created_at` timestamp NULL DEFAULT NULL,
   `password` varchar(100) DEFAULT NULL,
@@ -130,8 +147,8 @@ CREATE TABLE `users` (
 -- Dumping data for table `users`
 --
 
-INSERT INTO `users` (`uuid`, `nama`, `no_hp`, `email`, `created_at`, `password`, `role_id`, `updated_at`) VALUES
-('d7334c02-1480-4224-9d78-95b9c3228257', 'Muhammad Adi Saputro', '+6285748314069', 'adi123@gmail.com', '2023-05-31 06:35:30', '$2y$10$1I4eHr0VRCLYBYpSi2qVLuIp09iuF0IMUUGwg2DfL6PCDDfXDBB.u', 1, '2023-05-31 06:35:30');
+INSERT INTO `users` (`uuid`, `nama`, `no_hp`, `verified`, `verified_at`, `email`, `created_at`, `password`, `role_id`, `updated_at`) VALUES
+('fd73d715-1273-44b1-a1d5-f65f2c48cc7b', 'Muhammad Adi Saputro', '+6285748314069', 'true', '2023-06-02 07:36:10', 'muhammadxxz7@gmail.com', '2023-06-02 07:28:46', '$2y$10$B5QP7uNmCMC0inHYfoXwBOU3FkCMfg/RtexK3VXyxdAmSEEDeFB1W', 1, '2023-06-02 07:36:10');
 
 --
 -- Indexes for dumped tables
@@ -142,15 +159,22 @@ INSERT INTO `users` (`uuid`, `nama`, `no_hp`, `email`, `created_at`, `password`,
 --
 ALTER TABLE `kendaraan`
   ADD PRIMARY KEY (`uuid`),
-  ADD KEY `user_id` (`user_id`),
-  ADD KEY `tipe_id` (`tipe_id`);
+  ADD KEY `model_id` (`model_id`),
+  ADD KEY `user_id` (`user_id`);
+
+--
+-- Indexes for table `model_mobil`
+--
+ALTER TABLE `model_mobil`
+  ADD PRIMARY KEY (`id`);
 
 --
 -- Indexes for table `reservasi`
 --
 ALTER TABLE `reservasi`
   ADD PRIMARY KEY (`id`),
-  ADD KEY `kendaraan_id` (`kendaraan_id`);
+  ADD KEY `kendaraan_id` (`kendaraan_id`),
+  ADD KEY `user_id` (`user_id`);
 
 --
 -- Indexes for table `role`
@@ -167,12 +191,6 @@ ALTER TABLE `service`
   ADD KEY `service_advisor` (`service_advisor`);
 
 --
--- Indexes for table `tipe_mobil`
---
-ALTER TABLE `tipe_mobil`
-  ADD PRIMARY KEY (`id`);
-
---
 -- Indexes for table `users`
 --
 ALTER TABLE `users`
@@ -184,16 +202,16 @@ ALTER TABLE `users`
 --
 
 --
+-- AUTO_INCREMENT for table `model_mobil`
+--
+ALTER TABLE `model_mobil`
+  MODIFY `id` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
+
+--
 -- AUTO_INCREMENT for table `role`
 --
 ALTER TABLE `role`
   MODIFY `id` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
-
---
--- AUTO_INCREMENT for table `tipe_mobil`
---
-ALTER TABLE `tipe_mobil`
-  MODIFY `id` int NOT NULL AUTO_INCREMENT;
 
 --
 -- Constraints for dumped tables
@@ -203,13 +221,14 @@ ALTER TABLE `tipe_mobil`
 -- Constraints for table `kendaraan`
 --
 ALTER TABLE `kendaraan`
-  ADD CONSTRAINT `FKkendaraan153261` FOREIGN KEY (`tipe_id`) REFERENCES `tipe_mobil` (`id`),
+  ADD CONSTRAINT `FKkendaraan185624` FOREIGN KEY (`model_id`) REFERENCES `model_mobil` (`id`),
   ADD CONSTRAINT `FKkendaraan280354` FOREIGN KEY (`user_id`) REFERENCES `users` (`uuid`);
 
 --
 -- Constraints for table `reservasi`
 --
 ALTER TABLE `reservasi`
+  ADD CONSTRAINT `FKreservasi1255` FOREIGN KEY (`user_id`) REFERENCES `users` (`uuid`),
   ADD CONSTRAINT `FKreservasi901753` FOREIGN KEY (`kendaraan_id`) REFERENCES `kendaraan` (`uuid`);
 
 --

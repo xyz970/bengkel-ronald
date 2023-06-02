@@ -25,10 +25,10 @@ class InsertKendaraanRequest extends FormRequest
     {
         return [
             'merk'=>'required',
-            'model'=>'required',
+            'tipe_mobil'=>'required',
             'nomor_rangka'=>'required',
             'user_id'=>'required',
-            'tipe_id'=>'required',
+            'model_id'=>'required',
             'tahun_produksi'=>'required',
             'warna'=>'required',
             'nopol'=>'required',

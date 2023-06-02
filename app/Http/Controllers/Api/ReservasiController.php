@@ -14,7 +14,13 @@ class ReservasiController extends Controller
     public function insert(InsertReservasiRequest $request)
     {
         $input = $request->validated();
-        Reservasi::create($input);
-        return $this->successResponse("Reservasi berhasil didata");
+        $reservasi = Reservasi::where('user_id','=',$input['user_id'])->where('status','=','pending')->count();
+        if ($reservasi != 3) {
+            Reservasi::create($input);
+            return $this->successResponse("Reservasi berhasil didata");
+        }else{
+            return $this->internalErrorResponse("Reservasi hanya dibatasi 3 kali untuk setiap user",422);
+
+        }
     }
 }

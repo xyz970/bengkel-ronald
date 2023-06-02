@@ -29,6 +29,7 @@ class InsertReservasiRequest extends FormRequest
             'tanggal'=>'required|date',
             'jam'=>'required',
             'keluhan'=>'required',
+            'user_id'=>'required',
         ];
     }
 }

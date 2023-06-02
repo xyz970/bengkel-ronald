@@ -5,10 +5,13 @@ namespace App\Http\Controllers\Api;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\LoginRequest;
 use App\Http\Requests\RegisterRequest;
+use App\Mail\Verfikasi;
 use App\Models\User;
 use App\Traits\ApiResponse;
+use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Mail;
 use Tymon\JWTAuth\Exceptions\JWTException;
 use Tymon\JWTAuth\Facades\JWTAuth;
 
@@ -36,8 +39,23 @@ class AuthController extends Controller
     public function register(RegisterRequest $request)
     {
         $input = $request->validated();
-        User::create($input);
+        $user = User::create($input);
+        Mail::to($input['email'])->send(new Verfikasi($input['email'], $user->uuid));
         return $this->successResponse("Akun berhasil ditambahkan");
+    }
 
+    public function verifikasi($id)
+    {
+        $user = User::find($id);
+        if ($user->verified == 'false') {
+            $user->verified = 'true';
+            $user->verified_at = Carbon::now();
+            $user->update();
+
+            echo "Akun berhasil diverifikasi.. sekarang anda bisa login lewat aplikasi";
+        }else{
+            echo "Akun sudah diverifikasi..";
+
+        }
     }
 }
