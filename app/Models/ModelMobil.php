@@ -8,7 +8,7 @@ use Illuminate\Database\Eloquent\Model;
 class ModelMobil extends Model
 {
     use HasFactory;
-    protected $table = 'tipe_mobil';
+    protected $table = 'model_mobil';
     protected $primaryKey = 'id';
     protected $keyType = 'string';
 

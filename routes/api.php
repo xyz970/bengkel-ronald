@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\Api\AuthController;
 use App\Http\Controllers\Api\KendaraanController;
+use App\Http\Controllers\Api\ModelMobilController;
 use App\Http\Controllers\Api\ReservasiController;
 use App\Http\Middleware\ApiAuthCheck;
 use Illuminate\Http\Request;
@@ -27,6 +28,7 @@ Route::post('login',[AuthController::class, 'login']);
 
 Route::middleware(ApiAuthCheck::class)->group(function(){
     Route::group(['prefix'=>'kendaraan'],function(){
+        Route::get('/',[KendaraanController::class, 'index']);
         Route::post('insert',[KendaraanController::class, 'insert']);
     });
     Route::group(['prefix'=>'reservasi'],function(){
@@ -34,5 +36,6 @@ Route::middleware(ApiAuthCheck::class)->group(function(){
     });
 });
 
+Route::get('/model-mobil',[ModelMobilController::class, 'index']);
 
 
