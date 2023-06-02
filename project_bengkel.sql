@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: localhost:3306
--- Generation Time: Jun 02, 2023 at 07:53 AM
+-- Generation Time: Jun 02, 2023 at 07:32 PM
 -- Server version: 8.0.30
 -- PHP Version: 8.1.10
 
@@ -29,8 +29,8 @@ SET time_zone = "+00:00";
 
 CREATE TABLE `kendaraan` (
   `uuid` varchar(100) NOT NULL,
-  `merk` varchar(50) NOT NULL,
-  `model_id` int NOT NULL,
+  `merk` varchar(30) NOT NULL,
+  `model` varchar(50) NOT NULL,
   `nomor_rangka` varchar(50) NOT NULL,
   `user_id` varchar(100) NOT NULL,
   `tipe_mobil` varchar(50) NOT NULL,
@@ -47,26 +47,19 @@ CREATE TABLE `kendaraan` (
 -- Dumping data for table `kendaraan`
 --
 
-INSERT INTO `kendaraan` (`uuid`, `merk`, `model_id`, `nomor_rangka`, `user_id`, `tipe_mobil`, `tahun_produksi`, `warna`, `nopol`, `nomor_stnk`, `masa_stnk`, `created_at`, `updated_at`) VALUES
-('523932ff-fa34-4da6-9a1c-4eec42f09986', 'Honda', 1, 'VXC09ZYU', 'fd73d715-1273-44b1-a1d5-f65f2c48cc7b', 'Civic Turbo Type R', 2022, 'Burning Red', 'P 0923 LK', '109723572190431', '2027-05-21', '2023-06-02 07:44:05', '2023-06-02 07:44:05');
+INSERT INTO `kendaraan` (`uuid`, `merk`, `model`, `nomor_rangka`, `user_id`, `tipe_mobil`, `tahun_produksi`, `warna`, `nopol`, `nomor_stnk`, `masa_stnk`, `created_at`, `updated_at`) VALUES
+('e8e500c5-6721-4f0d-9a0b-b30ead64ecb4', 'Honda', 'Civic MT', 'VXC09ZYU', '668644a3-3094-4016-85c3-ff83d9189d17', 'Civic Turbo Type R', 2022, 'Burning Red', 'P 0923 LK', '109723572190431', '2027-05-21', '2023-06-02 18:02:17', '2023-06-02 18:02:17');
 
 -- --------------------------------------------------------
 
 --
--- Table structure for table `model_mobil`
+-- Table structure for table `merk`
 --
 
-CREATE TABLE `model_mobil` (
+CREATE TABLE `merk` (
   `id` int NOT NULL,
-  `keterangan` varchar(50) DEFAULT NULL
+  `nama` varchar(30) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
-
---
--- Dumping data for table `model_mobil`
---
-
-INSERT INTO `model_mobil` (`id`, `keterangan`) VALUES
-(1, 'Civic MT');
 
 -- --------------------------------------------------------
 
@@ -115,14 +108,22 @@ INSERT INTO `role` (`id`, `keterangan`) VALUES
 CREATE TABLE `service` (
   `uuid` varchar(100) NOT NULL,
   `id_kendaraan` varchar(100) NOT NULL,
-  `tipe_service` int DEFAULT NULL,
-  `service_advisor` varchar(100) NOT NULL,
+  `tipe_service` varchar(50) DEFAULT NULL,
+  `service_advisor` varchar(50) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NOT NULL,
   `tanggal` date DEFAULT NULL,
   `odometer` varchar(30) DEFAULT NULL,
   `detail` text,
+  `part_pengganti` text CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NOT NULL,
   `created_at` timestamp NULL DEFAULT NULL,
   `updated_at` timestamp NULL DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+
+--
+-- Dumping data for table `service`
+--
+
+INSERT INTO `service` (`uuid`, `id_kendaraan`, `tipe_service`, `service_advisor`, `tanggal`, `odometer`, `detail`, `part_pengganti`, `created_at`, `updated_at`) VALUES
+('f01e2c83-01f8-457b-8ffb-47f51d6de5fe', 'e8e500c5-6721-4f0d-9a0b-b30ead64ecb4', '8000KM', 'Adi', '2023-06-03', '10000KM', 'Pembersihan pada blok mesin', '-', NULL, NULL);
 
 -- --------------------------------------------------------
 
@@ -148,7 +149,7 @@ CREATE TABLE `users` (
 --
 
 INSERT INTO `users` (`uuid`, `nama`, `no_hp`, `verified`, `verified_at`, `email`, `created_at`, `password`, `role_id`, `updated_at`) VALUES
-('fd73d715-1273-44b1-a1d5-f65f2c48cc7b', 'Muhammad Adi Saputro', '+6285748314069', 'true', '2023-06-02 07:36:10', 'muhammadxxz7@gmail.com', '2023-06-02 07:28:46', '$2y$10$B5QP7uNmCMC0inHYfoXwBOU3FkCMfg/RtexK3VXyxdAmSEEDeFB1W', 1, '2023-06-02 07:36:10');
+('668644a3-3094-4016-85c3-ff83d9189d17', 'Muhammad Adi Saputro', '+6285748314069', 'true', '2023-06-02 17:46:23', 'muhammadxxz7@gmail.com', '2023-06-02 17:45:25', '$2y$10$GYFvBI8PhjZEWqRqQE61Q.9T71wYNl4a10u.WWNXWx5A6y3osBwSy', 1, '2023-06-02 17:46:23');
 
 --
 -- Indexes for dumped tables
@@ -159,13 +160,14 @@ INSERT INTO `users` (`uuid`, `nama`, `no_hp`, `verified`, `verified_at`, `email`
 --
 ALTER TABLE `kendaraan`
   ADD PRIMARY KEY (`uuid`),
-  ADD KEY `model_id` (`model_id`),
-  ADD KEY `user_id` (`user_id`);
+  ADD KEY `model` (`model`),
+  ADD KEY `user_id` (`user_id`),
+  ADD KEY `tipe_mobil` (`tipe_mobil`);
 
 --
--- Indexes for table `model_mobil`
+-- Indexes for table `merk`
 --
-ALTER TABLE `model_mobil`
+ALTER TABLE `merk`
   ADD PRIMARY KEY (`id`);
 
 --
@@ -187,8 +189,7 @@ ALTER TABLE `role`
 --
 ALTER TABLE `service`
   ADD PRIMARY KEY (`uuid`),
-  ADD KEY `id_kendaraan` (`id_kendaraan`),
-  ADD KEY `service_advisor` (`service_advisor`);
+  ADD KEY `id_kendaraan` (`id_kendaraan`);
 
 --
 -- Indexes for table `users`
@@ -200,12 +201,6 @@ ALTER TABLE `users`
 --
 -- AUTO_INCREMENT for dumped tables
 --
-
---
--- AUTO_INCREMENT for table `model_mobil`
---
-ALTER TABLE `model_mobil`
-  MODIFY `id` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
 
 --
 -- AUTO_INCREMENT for table `role`
@@ -221,7 +216,6 @@ ALTER TABLE `role`
 -- Constraints for table `kendaraan`
 --
 ALTER TABLE `kendaraan`
-  ADD CONSTRAINT `FKkendaraan185624` FOREIGN KEY (`model_id`) REFERENCES `model_mobil` (`id`),
   ADD CONSTRAINT `FKkendaraan280354` FOREIGN KEY (`user_id`) REFERENCES `users` (`uuid`);
 
 --
@@ -235,7 +229,6 @@ ALTER TABLE `reservasi`
 -- Constraints for table `service`
 --
 ALTER TABLE `service`
-  ADD CONSTRAINT `FKservice300595` FOREIGN KEY (`service_advisor`) REFERENCES `users` (`uuid`),
   ADD CONSTRAINT `FKservice611882` FOREIGN KEY (`id_kendaraan`) REFERENCES `kendaraan` (`uuid`);
 
 --

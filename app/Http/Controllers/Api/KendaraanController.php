@@ -25,5 +25,17 @@ class KendaraanController extends Controller
         $kendaraan = Kendaraan::where('user_id','=',$auth->uuid)->get();
         return $this->responseCollection("Data kendaraan",$kendaraan);
     }
+
+    public function edit($no_rangka)
+    {
+        $kendaraan = Kendaraan::where('nomor_rangka','=',$no_rangka)->first();
+        if ($kendaraan == '') {
+            return $this->internalErrorResponse("Data tidak ditemukan",404);
+        } else {
+            return $this->successResponseData("Detail",$kendaraan);
+        }
+        
+        
+    }
     
 }

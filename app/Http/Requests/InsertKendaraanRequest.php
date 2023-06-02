@@ -28,7 +28,7 @@ class InsertKendaraanRequest extends FormRequest
             'tipe_mobil'=>'required',
             'nomor_rangka'=>'required',
             'user_id'=>'required',
-            'model_id'=>'required',
+            'model'=>'required',
             'tahun_produksi'=>'required',
             'warna'=>'required',
             'nopol'=>'required',

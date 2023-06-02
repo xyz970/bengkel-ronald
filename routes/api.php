@@ -4,6 +4,7 @@ use App\Http\Controllers\Api\AuthController;
 use App\Http\Controllers\Api\KendaraanController;
 use App\Http\Controllers\Api\ModelMobilController;
 use App\Http\Controllers\Api\ReservasiController;
+use App\Http\Controllers\Api\ServiceController;
 use App\Http\Middleware\ApiAuthCheck;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
@@ -30,9 +31,14 @@ Route::middleware(ApiAuthCheck::class)->group(function(){
     Route::group(['prefix'=>'kendaraan'],function(){
         Route::get('/',[KendaraanController::class, 'index']);
         Route::post('insert',[KendaraanController::class, 'insert']);
+        Route::get('/{no_rangka}',[KendaraanController::class, 'edit']);
+
     });
     Route::group(['prefix'=>'reservasi'],function(){
         Route::post('insert',[ReservasiController::class, 'insert']);
+    });
+    Route::group(['prefix'=>'service'],function(){
+        Route::get('/{id_kendaraan}',[ServiceController::class, 'index']);
     });
 });
 

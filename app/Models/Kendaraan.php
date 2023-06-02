@@ -15,8 +15,4 @@ class Kendaraan extends Model
     protected $keyType = 'string';
     protected $guarded = '';
 
-    public function tipe_mobil()
-    {
-        return $this->hasOne(TipeMobil::class,'tipe_id');
-    }
 }
