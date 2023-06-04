@@ -30,7 +30,8 @@ class KendaraanController extends Controller
 
     public function edit($no_rangka)
     {
-        $kendaraan = Kendaraan::where('nomor_rangka','=',$no_rangka)->first();
+        $auth = Auth::user();
+        $kendaraan = Kendaraan::where('nomor_rangka','=',$no_rangka)->where('user_id','=',$auth->uuid)->first();
         if ($kendaraan == '') {
             return $this->internalErrorResponse("Data tidak ditemukan",404);
         } else {
