@@ -43,5 +43,6 @@ Route::middleware(ApiAuthCheck::class)->group(function(){
 });
 
 Route::get('/model-mobil',[ModelMobilController::class, 'index']);
+Route::get('/merk',[KendaraanController::class,'merk_mobil']);
 
 

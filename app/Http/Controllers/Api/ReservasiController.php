@@ -23,4 +23,10 @@ class ReservasiController extends Controller
 
         }
     }
+
+    public function index($status)
+    {
+        $reservasi = Reservasi::where('status','=',$status)->get();
+        return $this->responseCollection("Data reservasi",$reservasi);
+    }
 }
