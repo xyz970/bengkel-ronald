@@ -15,4 +15,14 @@ class Kendaraan extends Model
     protected $keyType = 'string';
     protected $guarded = '';
 
+    protected $hidden = [
+        'created_at',
+        'updated_at',
+    ];
+
+    public function reservasi()
+    {
+        return $this->hasOne(Reservasi::class);
+    }
+
 }

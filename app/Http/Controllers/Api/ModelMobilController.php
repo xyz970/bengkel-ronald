@@ -12,7 +12,7 @@ class ModelMobilController extends Controller
     use ApiResponse;
     public function index()
     {
-        $modelMobil = ModelMobil::all();
-        return $this->responseCollection("Data Model Mobil",$modelMobil);
+        // $modelMobil = ModelMobil::all();
+        // return $this->responseCollection("Data Model Mobil",$modelMobil);
     }
 }

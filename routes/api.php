@@ -36,6 +36,7 @@ Route::middleware(ApiAuthCheck::class)->group(function(){
     });
     Route::group(['prefix'=>'reservasi'],function(){
         Route::post('insert',[ReservasiController::class, 'insert']);
+        
     });
     Route::group(['prefix'=>'service'],function(){
         Route::get('/{id_kendaraan}',[ServiceController::class, 'index']);
@@ -44,5 +45,9 @@ Route::middleware(ApiAuthCheck::class)->group(function(){
 
 Route::get('/model-mobil',[ModelMobilController::class, 'index']);
 Route::get('/merk',[KendaraanController::class,'merk_mobil']);
+Route::get('reservasi/{status}',[ReservasiController::class,'index']);
+Route::get('reservasi/detail/{id}',[ReservasiController::class, 'detail']);
+Route::get('reservasi/status/{id}',[ReservasiController::class, 'changeStatus']);
+Route::get('reservasi/cancel/{id}',[ReservasiController::class, 'changeStatusCancel']);
 
 

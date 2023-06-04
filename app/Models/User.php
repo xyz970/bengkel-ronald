@@ -38,6 +38,8 @@ class User extends Authenticatable implements JWTSubject
      */
     protected $hidden = [
         'password',
+        'created_at',
+        'updated_at',
         'remember_token',
     ];
 
@@ -65,5 +67,10 @@ class User extends Authenticatable implements JWTSubject
     public function getJWTCustomClaims()
     {
         return [];
+    }
+
+    public function reservasi()
+    {
+        return $this->hasOne(Reservasi::class);
     }
 }
