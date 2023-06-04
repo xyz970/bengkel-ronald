@@ -9,4 +9,6 @@ class MerkMobil extends Model
 {
     use HasFactory;
     protected $table = 'merk';
+    protected $guarded = '';
+    public $timestamps = false;
 }

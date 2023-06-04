@@ -15,4 +15,16 @@ class ServiceController extends Controller
         $service = Service::where('id_kendaraan','=',$id_kendaraan)->get();
         return $this->responseCollection("Data service",$service);
     }
+
+    public function showAll()
+    {
+        $service = Service::all();
+        return $this->responseCollection("Data service All",$service);
+    }
+
+    public function detail($id_service)
+    {
+        $service = Service::find($id_service);
+        return $this->successResponseData("Detail",$service);
+    }
 }

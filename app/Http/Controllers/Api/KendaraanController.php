@@ -43,5 +43,12 @@ class KendaraanController extends Controller
         $merk = MerkMobil::all();
         return $this->responseCollection("Data Merk",$merk);
     }
+
+    public function insertMerk(Request $request)
+    {
+        $input = $request->only(['nama']);
+        MerkMobil::create($input);
+        return $this->successResponse("Data berhasil disimpan");
+    }
     
 }

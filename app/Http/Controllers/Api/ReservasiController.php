@@ -5,8 +5,11 @@ namespace App\Http\Controllers\Api;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\InsertReservasiRequest;
 use App\Models\Reservasi;
+use App\Models\Service;
 use App\Traits\ApiResponse;
+use Carbon\Carbon;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 
 class ReservasiController extends Controller
 {
@@ -48,8 +51,20 @@ class ReservasiController extends Controller
         $reservasi->update();
         return $this->successResponse("Data berhasil diubah..");
     }
-    // public function masuk(Type $var = null)
-    // {
-    //     # code...
-    // }
+    public function setService(Request $request,$id)
+    {
+        $user = Auth::user();
+        $input = $request->only('odometer','detail','part_pengganti');
+        $reservasi = Reservasi::find($id);
+        $input += array(
+            'service_advisor'=>$user->nama,
+            'tipe_service'=>$reservasi->detail_service,
+            'tanggal'=>Carbon::parse( $reservasi->tanggal)->format('Y-m-d'),
+            'id_kendaraan'=>$reservasi->kendaraan_id
+        );
+        Service::create($input);
+        $reservasi->status = 'done';
+        $reservasi->update();
+        return $this->successResponse("Data service berhasil didata");
+    }
 }
