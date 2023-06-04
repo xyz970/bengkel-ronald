@@ -14,8 +14,6 @@ class ServiceController extends Controller
     use ApiResponse;
     public function index($id_kendaraan)
     {
-        $auth = Auth::user();
-        // $kendaran = Kendaraan::where('id_kendaraan','=',$id_kendaraan)->first()
         $service = Service::where('id_kendaraan','=',$id_kendaraan)->get();
         return $this->responseCollection("Data service",$service);
     }
