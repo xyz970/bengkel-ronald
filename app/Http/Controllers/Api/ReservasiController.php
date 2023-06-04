@@ -10,6 +10,7 @@ use App\Traits\ApiResponse;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\DB;
 
 class ReservasiController extends Controller
 {
@@ -55,11 +56,12 @@ class ReservasiController extends Controller
     {
         $user = Auth::user();
         $input = $request->only('odometer','detail','part_pengganti');
+        $dbres = DB::table('reservasi')->where('id','=',$id)->first();
         $reservasi = Reservasi::find($id);
         $input += array(
             'service_advisor'=>$user->nama,
             'tipe_service'=>$reservasi->detail_service,
-            'tanggal'=>Carbon::parse( $reservasi->tanggal)->format('Y-m-d'),
+            'tanggal'=>Carbon::parse($dbres->tanggal)->format('Y-m-d'),
             'id_kendaraan'=>$reservasi->kendaraan_id
         );
         Service::create($input);
