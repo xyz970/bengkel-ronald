@@ -23,4 +23,9 @@ class Service extends Model
             get: fn ($value) => Carbon::createFromFormat('Y-m-d',  $value)->translatedFormat('d F Y'),
         );
     }
+
+    public function kendaraan()
+    {
+        return $this->belongsTo(Kendaraan::class,'id_kendaraan');
+    }
 }

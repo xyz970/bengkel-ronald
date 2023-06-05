@@ -20,7 +20,7 @@ class ServiceController extends Controller
 
     public function showAll()
     {
-        $service = Service::all();
+        $service = Service::with('kendaraan','kendaraan.user')->get();
         return $this->responseCollection("Data service All",$service);
     }
 

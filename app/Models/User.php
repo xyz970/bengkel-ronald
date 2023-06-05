@@ -73,4 +73,9 @@ class User extends Authenticatable implements JWTSubject
     {
         return $this->hasOne(Reservasi::class);
     }
+
+    public function kendaraan()
+    {
+        return $this->hasOne(Kendaraan::class);
+    }
 }

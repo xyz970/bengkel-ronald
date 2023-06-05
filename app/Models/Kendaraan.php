@@ -20,9 +20,18 @@ class Kendaraan extends Model
         'updated_at',
     ];
 
+    public function user()
+    {
+        return $this->belongsTo(User::class,'user_id');
+    }
     public function reservasi()
     {
         return $this->hasOne(Reservasi::class);
+    }
+
+    public function service()
+    {
+        return $this->hasOne(Service::class);
     }
 
 }
