@@ -5,6 +5,8 @@ namespace App\Http\Controllers\Api;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\LoginRequest;
 use App\Http\Requests\RegisterRequest;
+use App\Jobs\SendEmail;
+use App\Jobs\SendEmailTest;
 use App\Mail\Verfikasi;
 use App\Models\User;
 use App\Traits\ApiResponse;
@@ -39,8 +41,12 @@ class AuthController extends Controller
     public function register(RegisterRequest $request)
     {
         $input = $request->validated();
-        $user = User::create($input);
-        Mail::to($input['email'])->send(new Verfikasi($input['email'], $user->uuid));
+        $user = User::create($input); 
+        // Mail::to($input['email'])->send(new Verfikasi($input['email'], $user->uuid));
+        // Mail::to($input['email'])->send(new Verfikasi($input['email'], '123'));
+        // dispatch(new SendEmail($input['email'],$user->uuid));
+        // dispatch(new SendEmail($input['email'],'123'));
+        dispatch(new \App\Jobs\SendEmailTest($input['email'],$user->uuid));
         return $this->successResponse("Akun berhasil ditambahkan");
     }
 

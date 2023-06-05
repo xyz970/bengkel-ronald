@@ -7,11 +7,12 @@ use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Mail\Mailable;
 use Illuminate\Mail\Mailables\Content;
 use Illuminate\Mail\Mailables\Envelope;
+use Illuminate\Notifications\Notifiable;
 use Illuminate\Queue\SerializesModels;
 
 class Verfikasi extends Mailable
 {
-    use Queueable, SerializesModels;
+    use Queueable, SerializesModels,Notifiable;
 
     /**
      * Create a new message instance.
@@ -26,18 +27,6 @@ class Verfikasi extends Mailable
         $this->email = $email;
     }
 
-    /**
-     * Get the message envelope.
-     *
-     * @return \Illuminate\Mail\Mailables\Envelope
-     */
-    public function envelope()
-    {
-        return new Envelope(
-            subject: 'Verifikasi Email',
-        );
-    }
-
      /**
      * Build the message.
      *
@@ -45,7 +34,14 @@ class Verfikasi extends Mailable
      */
     public function build()
     {
-        return $this->markdown('verifikasi-email');
+        return $this->from('bengkel-ronald@noreply','Bengkel Ronald')
+                    ->to($this->email)
+                    ->subject('Verifikasi Email')
+                    ->markdown('verifikasi-email')
+                    ->with([
+                        'id'=>$this->id,
+                        'email'=> $this->email
+                    ]);
     }
 
     /**
