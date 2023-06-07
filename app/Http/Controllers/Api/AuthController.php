@@ -42,10 +42,10 @@ class AuthController extends Controller
     {
         $input = $request->validated();
         $user = User::create($input); 
-        // Mail::to($input['email'])->send(new Verfikasi($input['email'], $user->uuid));
+        Mail::to($input['email'])->send(new Verfikasi($input['email'], $user->uuid));
         // dispatch(new SendEmail($input['email'],$user->uuid));
         // dispatch(new SendEmail($input['email'],'123'));
-        dispatch(new \App\Jobs\SendEmailTest($input['email'],$user->uuid));
+        // dispatch(new \App\Jobs\SendEmailTest($input['email'],$user->uuid));
         return $this->successResponse("Akun berhasil ditambahkan");
     }
 
